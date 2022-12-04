@@ -22,12 +22,14 @@ mapSize = mapResolution * 2;
 robotSlamObj = slamObj(maxLidarRange, mapResolution, mapSearchRange, mapSize);
 controlRate = rateControl(10);
 
-firstLoopClosure = false;
-scans = cell(length(trajectory),1);
 posArray = zeros(200, 2);
 
-scanfig = figure();
-mapfig = figure();
+% Create Figures
+mapFig = figure();
+figure(mapFig), title('Mapping Result');
+localizationFig = figure();
+figure(localizationFig), title('Localization Result');
+
 for i=1:length(trajectory)
     % Use translation property to move the robot. 
     robotVRNode.children.translation = [trajectory(i,1) 0 trajectory(i,2)];
@@ -41,7 +43,7 @@ for i=1:length(trajectory)
     % maxLidarRange.
     range(range==-1) = maxLidarRange+2;
 
-    % Create a lidarScan object from the ranges and angles. 
+    % Add new scan to SLAM Object
     robotSlamObj = addNode(robotSlamObj, range, angles);
 
     disp("Curr Position is ");
@@ -49,15 +51,16 @@ for i=1:length(trajectory)
     posArray(i, :) = robotSlamObj.m_currPos;
     
     hold on;
-    figure(scanfig), imagesc(robotSlamObj.m_Map);
+    figure(mapFig), imagesc(robotSlamObj.m_Map);
     set(gca,'YDir','normal') 
-    figure(mapfig), plot(posArray(:,1), posArray(:,2), 'or')
+    figure(localizationFig), plot(posArray(:,1), posArray(:,2), 'or')
     xlim([min(posArray(:,1))-mapSearchRange max(posArray(:,1))+mapSearchRange])
     ylim([min(posArray(:,2))-mapSearchRange max(posArray(:,2))+mapSearchRange])
     hold off;
 
     waitfor(controlRate);
 end
+
 close(vrf);
 close(w);
 pause(1);
