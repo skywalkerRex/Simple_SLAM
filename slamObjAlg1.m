@@ -1,4 +1,4 @@
-classdef slamObj
+classdef slamObjAlg1
     properties (Access = private)
         m_isFirst % if the first point passed in
         m_MapCenter % Size of the map
@@ -14,7 +14,7 @@ classdef slamObj
     % properties
     % end
     methods
-        function obj = slamObj(maxRange, resolution, searchRange, mapSize) % Class Constructor
+        function obj = slamObjAlg1(maxRange, resolution, searchRange, mapSize) % Class Constructor
             obj.m_isFirst = false;
             obj.m_Map = zeros(mapSize);
             obj.m_MapSize = mapSize;

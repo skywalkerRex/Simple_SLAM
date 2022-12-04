@@ -17,9 +17,10 @@ pause(1);
 
 maxLidarRange = 8;
 mapResolution = 100;
+%mapResolution = 80;
 mapSearchRange = mapResolution / 10;
 mapSize = mapResolution * 2;
-robotSlamObj = slamObj(maxLidarRange, mapResolution, mapSearchRange, mapSize);
+robotSlamObj = slamObjAlg1(maxLidarRange, mapResolution, mapSearchRange, mapSize);
 controlRate = rateControl(10);
 
 posArray = zeros(200, 2);
