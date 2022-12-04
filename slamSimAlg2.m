@@ -1,4 +1,4 @@
-load slamRobotTrajectory.mat 
+load testTrajectory.mat 
 
 w = vrworld('slamSimulatedWorld.x3d');
 open(w);
@@ -16,7 +16,7 @@ angles = deg2rad(angles)';
 pause(1);
 
 maxLidarRange = 8;
-mapResolution = 1000;
+mapResolution = 500;
 %mapResolution = 80;
 mapSearchRange = mapResolution / 20;
 mapSize = mapResolution * 2;
