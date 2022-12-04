@@ -47,11 +47,11 @@ for i=1:length(trajectory)
     robotSlamObj = addNode(robotSlamObj, range, angles);
 
     disp("Curr Position is ");
-    disp(robotSlamObj.m_currPos);
-    posArray(i, :) = robotSlamObj.m_currPos;
+    disp(GetCurrLoc(robotSlamObj));
+    posArray(i, :) = GetCurrLoc(robotSlamObj);
     
     hold on;
-    figure(mapFig), imagesc(robotSlamObj.m_Map);
+    figure(mapFig), imagesc(GetMap(robotSlamObj));
     set(gca,'YDir','normal') 
     figure(localizationFig), plot(posArray(:,1), posArray(:,2), 'or')
     xlim([min(posArray(:,1))-mapSearchRange max(posArray(:,1))+mapSearchRange])

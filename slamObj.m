@@ -1,17 +1,18 @@
 classdef slamObj
-    properties
-        m_Map % Map of all cuurent point
-        m_MapSize % Size of the map (Raise the map size if out of index)
+    properties (Access = private)
+        m_isFirst % if the first point passed in
         m_MapCenter % Size of the map
+        m_MapSize % Size of the map (Raise the map size if out of index)
         m_maxRange % max detecrange of device
+        m_maxSearch; % maxSearch Distance
         m_resolution % Resolution of each scan
         m_prevScan % Previous Scan
         m_currScan % Current Scan
-        m_isFirst % if the first point passed in
-        m_maxSearch; % maxSearch Distance
-
+        m_Map % Map of all cuurent point
         m_currPos; % localization result
     end
+    % properties
+    % end
     methods
         function obj = slamObj(maxRange, resolution, searchRange, mapSize) % Class Constructor
             obj.m_isFirst = false;
@@ -71,6 +72,14 @@ classdef slamObj
                     obj.m_Map(mapY, mapX) = currVal + obj.m_currScan(j,i);
                 end
             end
+        end
+
+        function cuurPos = GetCurrLoc(obj)
+            cuurPos = obj.m_currPos;
+        end
+
+        function map = GetMap(obj)
+            map = obj.m_Map;
         end
     end
 end
