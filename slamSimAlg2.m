@@ -55,9 +55,11 @@ for i=1:length(trajectory)
     figure(mapFig), imagesc(GetMap(robotSlamObj));
     set(gca,'YDir','normal') 
     title('Mapping Result');
-    figure(localizationFig), plot(posArray(:,1), posArray(:,2), 'or')
-    figure(localizationFig), xlim([min(posArray(:,1))-0.5 max(posArray(:,1))+0.5])
-    figure(localizationFig), ylim([min(posArray(:,2))-0.5 max(posArray(:,2))+0.5])
+    displayVec = posArray;
+    displayVec(i+1:end,:) = [];
+    figure(localizationFig), plot(displayVec(:,1), displayVec(:,2), 'or')
+    figure(localizationFig), xlim([min(displayVec(:,1))-0.5 max(displayVec(:,1))+0.5])
+    figure(localizationFig), ylim([min(displayVec(:,2))-0.5 max(displayVec(:,2))+0.5])
     hold off;
 
     % waitfor(controlRate);
