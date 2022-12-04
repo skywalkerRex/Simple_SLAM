@@ -1,7 +1,7 @@
 function position = getCurrPosition(currPosition, currScan, prevScan, boardSize, searchSize)
-    [currX, currY] = find(currScan == 1);
+    [currY, currX] = find(currScan == 1);
     currObstacleList = [currX, currY];
-    [prevX, prevY] = find(prevScan == 1);
+    [prevY, prevX] = find(prevScan == 1);
     prevObstacleList = [prevX, prevY];
     vectorList = getVectorList(currObstacleList, prevObstacleList, boardSize, searchSize);
     if isempty(vectorList)
@@ -13,7 +13,7 @@ function position = getCurrPosition(currPosition, currScan, prevScan, boardSize,
 end
 
 function vectorList = getVectorList(currPointList, prevPointList, boardSize, searchSize)
-    vectorList = []; % zeros(length(currPointList),2);
+    vectorList = zeros(length(currPointList),2);
     row = 0;
     for index = 1 : length(currPointList)
         tempCurrPoint = currPointList(index, :);
@@ -22,11 +22,12 @@ function vectorList = getVectorList(currPointList, prevPointList, boardSize, sea
             tempDistance = getDistance(tempCurrPoint, tempPosition);
             if tempDistance ~= 0
                 row = row + 1;
-                vectorList(row, 1) = getDirection(tempCurrPoint, tempPosition);
+                vectorList(row, 1) = getDirection(tempPosition, tempCurrPoint);
                 vectorList(row, 2) = tempDistance;
             end
         end
     end
+    vectorList(row+1:end,:) = [];
 end
 
 function vector = getVector(vectorList)
@@ -41,8 +42,8 @@ function vector = getVector(vectorList)
 end
 
 function position = getPosition(currenPosition, vector)
-    position(1) = round(currenPosition(1) + vector(2) * sin((vector(1) - pi/2)));
-    position(2) = round(currenPosition(2) + vector(2) * cos((vector(1) - pi/2)));
+    position(1) = round(currenPosition(1) + vector(2) * cos(vector(1)));
+    position(2) = round(currenPosition(2) + vector(2) * sin(vector(1)));
 end
 
 function distance = getDistance(currenPoint, checkPoint)
@@ -53,7 +54,7 @@ end
 function direction = getDirection(currenPoint, lastPoint)
     xDiff = currenPoint(1) - lastPoint(1);
     yDiff = currenPoint(2) - lastPoint(2);
-    direction = -atan2(xDiff, yDiff);
+    direction = atan2(yDiff, xDiff);
 end
 
 function closestPosition = findClosestPosition(currenPoint, checkPointList, boardSize, searchSize)
