@@ -1,32 +1,5 @@
-classdef slamObjAlg1
-    properties (Access = private)
-        m_isFirst % if the first point passed in
-        m_MapCenter % Size of the map
-        m_MapSize % Size of the map (Raise the map size if out of index)
-        m_maxRange % max detecrange of device
-        m_maxSearch; % maxSearch Distance
-        m_resolution % Resolution of each scan
-        m_prevScan % Previous Scan
-        m_currScan % Current Scan
-        m_Map % Map of all cuurent point
-        m_currPos; % localization result
-    end
-    % properties
-    % end
+classdef slamObjAlg1 < slamObj
     methods
-        function obj = slamObjAlg1(maxRange, resolution, searchRange, mapSize) % Class Constructor
-            obj.m_isFirst = false;
-            obj.m_Map = zeros(mapSize);
-            obj.m_MapSize = mapSize;
-            obj.m_MapCenter = [mapSize/2, mapSize/2];
-            obj.m_maxRange = maxRange;
-            obj.m_maxSearch = searchRange;
-            obj.m_resolution = resolution;
-            obj.m_prevScan = zeros(resolution);
-            obj.m_currScan = zeros(resolution);
-            obj.m_currPos = zeros(1,2);
-        end
-
         function obj = addNode(obj, range, angle) % Add New Lidar result
             obj.m_prevScan = obj.m_currScan;
             obj.m_currScan = zeros(obj.m_resolution);
@@ -72,14 +45,6 @@ classdef slamObjAlg1
                     obj.m_Map(mapY, mapX) = currVal + obj.m_currScan(j,i);
                 end
             end
-        end
-
-        function cuurPos = GetCurrLoc(obj)
-            cuurPos = obj.m_currPos;
-        end
-
-        function map = GetMap(obj)
-            map = obj.m_Map;
         end
     end
 end

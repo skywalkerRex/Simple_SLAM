@@ -20,7 +20,8 @@ mapResolution = 200;
 %mapResolution = 80;
 mapSearchRange = mapResolution / 10;
 mapSize = mapResolution * 2;
-robotSlamObj = slamObjAlg1(maxLidarRange, mapResolution, mapSearchRange, mapSize);
+robotOrigin = [-3, -2.8];
+robotSlamObj = slamObjAlg1(maxLidarRange, mapResolution, mapSearchRange, mapSize, robotOrigin);
 controlRate = rateControl(10);
 
 posArray = zeros(200, 2);
@@ -55,8 +56,8 @@ for i=1:length(trajectory)
     set(gca,'YDir','normal') 
     title('Mapping Result');
     figure(localizationFig), plot(posArray(:,1), posArray(:,2), 'or')
-    figure(localizationFig), xlim([min(posArray(:,1))-mapSearchRange max(posArray(:,1))+mapSearchRange])
-    figure(localizationFig), ylim([min(posArray(:,2))-mapSearchRange max(posArray(:,2))+mapSearchRange])
+    figure(localizationFig), xlim([min(posArray(:,1))-0.5 max(posArray(:,1))+0.5])
+    figure(localizationFig), ylim([min(posArray(:,2))-0.5 max(posArray(:,2))+0.5])
     hold off;
 
     % waitfor(controlRate);
