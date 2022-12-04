@@ -16,7 +16,8 @@ angles = deg2rad(angles)';
 pause(1);
 
 maxLidarRange = 8;
-mapResolution = 100;
+mapResolution = 800;
+%mapResolution = 80;
 mapSearchRange = mapResolution / 10;
 mapSize = mapResolution * 2;
 robotSlamObj = slamObj(maxLidarRange, mapResolution, mapSearchRange, mapSize);

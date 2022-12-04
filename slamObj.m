@@ -38,7 +38,6 @@ classdef slamObj
                     obj.m_currScan(round(nodeY), round(nodeX)) = 1;
                 end
             end
-            
             if not (obj.m_isFirst) 
                 % init the map with start point
                 obj.m_currPos(1) = 0;
@@ -46,22 +45,7 @@ classdef slamObj
                 obj.m_isFirst = true;
             else
                 % Iterate the new result with the previous scan to check the moveing distance
-                minDiff = obj.m_resolution * obj.m_resolution;
-                currOffSet = zeros(1,2);
-                for i = (-obj.m_maxSearch):obj.m_maxSearch
-                    for j = (-obj.m_maxSearch):obj.m_maxSearch
-                        shiftScan = matrixShift(obj.m_currScan, i, j);
-                        diffMatrix = shiftScan - obj.m_prevScan;
-                        currDiff = sum(abs(diffMatrix), 'all');
-                        if(currDiff < minDiff)
-                            % imagesc(diffMatrix);
-                            minDiff = currDiff;
-                            currOffSet(1) = i;
-                            currOffSet(2) = j;
-                        end
-                    end
-                end
-                obj.m_currPos = obj.m_currPos + currOffSet;
+                obj.m_currPos = getCurrPosition(obj.m_currPos, obj.m_currScan, obj.m_prevScan, obj.m_resolution, 20);
             end
             % After the localization result calculated, Update the map
             for i = 1:obj.m_resolution
