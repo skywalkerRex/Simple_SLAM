@@ -16,7 +16,7 @@ angles = deg2rad(angles)';
 pause(1);
 
 maxLidarRange = 8;
-mapResolution = 150;
+mapResolution = 100;
 mapSearchRange = mapResolution / 10;
 mapSize = mapResolution * 2;
 robotSlamObj = slamObj(maxLidarRange, mapResolution, mapSearchRange, mapSize);
@@ -50,14 +50,14 @@ for i=1:length(trajectory)
     
     hold on;
     figure(scanfig), imagesc(robotSlamObj.m_Map);
+    set(gca,'YDir','normal') 
     figure(mapfig), plot(posArray(:,1), posArray(:,2), 'or')
-    xlim([min(posArray(:,1))-2 max(posArray(:,1))+2])
-    ylim([min(posArray(:,2))-2 max(posArray(:,2))+2])
+    xlim([min(posArray(:,1))-mapSearchRange max(posArray(:,1))+mapSearchRange])
+    ylim([min(posArray(:,2))-mapSearchRange max(posArray(:,2))+mapSearchRange])
     hold off;
 
     waitfor(controlRate);
 end
-figure(scanfig), imagesc(robotSlamObj.m_Map);
 close(vrf);
 close(w);
 pause(1);

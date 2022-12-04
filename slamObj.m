@@ -36,13 +36,13 @@ classdef slamObj
                 end
             end
             
-            currOffSet = zeros(1,2);
             if not (obj.m_isFirst)
                 obj.m_currPos(1) = 0;
                 obj.m_currPos(2) = 0;
                 obj.m_isFirst = true;
             else
                 minDiff = obj.m_resolution * obj.m_resolution;
+                currOffSet = zeros(1,2);
                 for i = (-obj.m_maxSearch):obj.m_maxSearch
                     for j = (-obj.m_maxSearch):obj.m_maxSearch
                         shiftScan = matrixShift(obj.m_currScan, i, j);
