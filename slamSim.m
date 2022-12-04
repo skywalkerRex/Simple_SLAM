@@ -26,7 +26,6 @@ posArray = zeros(200, 2);
 
 % Create Figures
 mapFig = figure();
-figure(mapFig), title('Mapping Result');
 localizationFig = figure();
 figure(localizationFig), title('Localization Result');
 
@@ -53,9 +52,10 @@ for i=1:length(trajectory)
     hold on;
     figure(mapFig), imagesc(GetMap(robotSlamObj));
     set(gca,'YDir','normal') 
+    title('Mapping Result');
     figure(localizationFig), plot(posArray(:,1), posArray(:,2), 'or')
-    xlim([min(posArray(:,1))-mapSearchRange max(posArray(:,1))+mapSearchRange])
-    ylim([min(posArray(:,2))-mapSearchRange max(posArray(:,2))+mapSearchRange])
+    figure(localizationFig), xlim([min(posArray(:,1))-mapSearchRange max(posArray(:,1))+mapSearchRange])
+    figure(localizationFig), ylim([min(posArray(:,2))-mapSearchRange max(posArray(:,2))+mapSearchRange])
     hold off;
 
     waitfor(controlRate);
