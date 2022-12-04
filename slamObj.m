@@ -45,7 +45,7 @@ classdef slamObj
                 obj.m_isFirst = true;
             else
                 % Iterate the new result with the previous scan to check the moveing distance
-                obj.m_currPos = getCurrPosition(obj.m_currPos, obj.m_currScan, obj.m_prevScan, obj.m_resolution, 20);
+                obj.m_currPos = getCurrPosition(obj.m_currPos, obj.m_currScan, obj.m_prevScan, obj.m_resolution, obj.m_maxSearch);
             end
             % After the localization result calculated, Update the map
             for i = 1:obj.m_resolution

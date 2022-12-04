@@ -7,37 +7,36 @@ function position = getCurrPosition(currPosition, currScan, prevScan, boardSize,
     if isempty(vectorList)
         position = currPosition;
     else
-        vactor = getVactor(vectorList);
-        position = getPosition(currPosition, vactor);
+        vector = getVector(vectorList);
+        position = getPosition(currPosition, vector);
     end
 end
 
-function vactorList = getVectorList(currPointList, prevPointList, boardSize, searchSize)
-    vactorList = [];
+function vectorList = getVectorList(currPointList, prevPointList, boardSize, searchSize)
+    vectorList = []; % zeros(length(currPointList),2);
     row = 0;
-    tempPrevPointList = prevPointList;
     for index = 1 : length(currPointList)
         tempCurrPoint = currPointList(index, :);
-        tempPosition = findClosestPosition(tempCurrPoint, tempPrevPointList, boardSize, searchSize);
+        tempPosition = findClosestPosition(tempCurrPoint, prevPointList, boardSize, searchSize);
         if ~isempty(tempPosition)
             tempDistance = getDistance(tempCurrPoint, tempPosition);
             if tempDistance ~= 0
                 row = row + 1;
-                vactorList(row, 1) = getDirection(tempCurrPoint, tempPosition);
-                vactorList(row, 2) = tempDistance;
+                vectorList(row, 1) = getDirection(tempCurrPoint, tempPosition);
+                vectorList(row, 2) = tempDistance;
             end
         end
     end
 end
 
-function vactor = getVactor(vactorList)
-    [vactor(1), time] = mode(vactorList(:, 1), "all");
-    vactor(2) = mode(vactorList(:, 2), "all");
-    vactorList(vactorList == vactor) = [];
-    [subVactor(1), subTime] = mode(vactorList(:,1), "all");
-    subVactor(2) = mode(vactorList(:,2), "all");
-    if subTime > 5
-        vactor = (time * vactor + subTime * subVactor) / (time + subTime);
+function vector = getVector(vectorList)
+    [vector(1), freq] = mode(vectorList(:, 1), "all");
+    vector(2) = mode(vectorList(:, 2), "all");
+    vectorList(vectorList == vector) = [];
+    [subVector(1), secondFreq] = mode(vectorList(:,1), "all");
+    subVector(2) = mode(vectorList(:,2), "all");
+    if secondFreq > 5
+        vector = (freq * vector + secondFreq * subVector) / (freq + secondFreq);
     end
 end
 
