@@ -59,7 +59,7 @@ for i=1:length(trajectory)
     figure(localizationFig), ylim([min(posArray(:,2))-mapSearchRange max(posArray(:,2))+mapSearchRange])
     hold off;
 
-    waitfor(controlRate);
+    % waitfor(controlRate);
 end
 
 close(vrf);
