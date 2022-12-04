@@ -9,7 +9,7 @@ This algorithm is intended to do SLAM based on Lidar data and without odometry s
 From Lidar sensor, we could get a data includes 240 sets of data with range and radius. Those data demonstrates the Lidar detect data around the robot.
 
 In order to do the SLAM computation, transfering Lidar data into Cartesian coordinate and mapping into a customized resoultion output is easier computation.
-After getting the second set of data. By looping all the direction of to find out the difference between curren vs previous to determine which direction does the robot moved.
+After getting the second set of data. By looping all the direction of to find out the difference between curren scan vs previous scan to determine which direction and how long distance did the robot move.
 
 To collect a comperhensive mapping data, the robot need to finish a loop running in the area. By cumulating the data, finally we could get the map data of the current space.
 
