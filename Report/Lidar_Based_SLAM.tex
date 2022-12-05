@@ -66,34 +66,11 @@ In order to be able to reduce the number of operations to calculate the current 
 Afterward, by overlapping the two sets of data while removing the unchanged part and keeping the moving part. The position of the obstacle that has changed before and after the movement can be obtained. Moreover, based on the current radar information, each node in the current set will find the nearest node in the previous radar information. Simultaneously it will save the angle and distance difference between each node and its nearest neighbor in a new array. Through this method, we can obtain an array containing the approximate direction and distance of each node. However, the data at this point contains a lot of noise information in order to reduce the impact of noise on the data. This algorithm will be done by finding the top five sets of plural data with the largest percentage in the array and getting the vector information of their average values. Therefore, the relative direction and distance of the overall movement will be estimated to get the current position
 
 \section{Results Analyze}
-In the test section, we use MATLAB's simulator world as the field to run this test. By modifying the running path from the original demonstrated path, and adding a diagonal running path, we could also validate the robustness of our algorithm. When the simulation run is finished, we could compare the algorithm-generated running path and the actual running path to validate the accuracy of the algorithm.
-\begin{equation}
-\Delta E = \sqrt{\overline{X_e}^2 + \overline{Y_e}^2}\label{eqError}
-\end{equation}
+To test the performance between the two algorithms in a practice situation, we created a simulated 3d environment using Matlab's built-in editor to test the robot's localization capabilities. In the environment, we placed a certain number of obstacles and set the robot's travel path, obtained a simulated radar signal from the robot's current location, and used both algorithms to estimate the robot's position. While we can adjust the precision to expand the scanning range and accuracy of the radar, in this way, we can test the algorithm in the ideal environment.
+
 
 \subsection{Figures and Tables}
-\paragraph{Positioning Figures and Tables} Place figures and tables at the top and 
-bottom of columns. Avoid placing them in the middle of columns. Large 
-figures and tables may span across both columns. Figure captions should be 
-below the figures; table heads should appear above the tables. Insert 
-figures and tables after they are cited in the text. Use the abbreviation
-
-\begin{table}[htbp]
-\caption{Pattern Match Algoritm Precision VS ICP Algoritm Precision}
-\begin{center}
-\begin{tabular}{|r|r|r|}
-\hline
-\multicolumn{1}{|l|}{Scan Resolution} & \multicolumn{1}{l|}{Pattern Match} & \multicolumn{1}{l|}{ICP Algoritm} \\ \hline
-50                                    & 0.086978                                              & 0.520403                                    \\ \hline
-100                                   & 0.059874                                              & 0.90311                                     \\ \hline
-200                                   & 0.020188                                              & 0.947589                                    \\ \hline
-300                                   & 0.143696                                              & 0.913981                                    \\ \hline
-400                                   & 1.795881                                              & 0.86157                                     \\ \hline
-500                                   & 3.327148                                              & 0.825105                                    \\ \hline
-\end{tabular}
-\label{tab1}
-\end{center}
-\end{table}
+By testing the two algorithms in different resolution setting, we obtained two sets of data and made them into a table. In the first set of data \ref{RuntimeFig}, we compare the time consumed by the algorithm at different accuracies by using Matlab's built-in timing function, showing that the first algorithm shows an exponential increase in running time as the scanning accuracy increases. In contrast, the second algorithm can still maintain a very fast computational power under high-precision scanning.
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=\linewidth]{../result/Pattern_Match_Algoritm_Precision_VS_ICP_Algoritm_Precision.png}}
@@ -101,22 +78,10 @@ figures and tables after they are cited in the text. Use the abbreviation
 \label{PrecisionFig}
 \end{figure}
 
-\begin{table}[htbp]
-\caption{Pattern Match Algoritm Runtime VS ICP Algoritm Runtime}
-\begin{center}
-\begin{tabular}{|r|r|r|}
-\hline
-\multicolumn{1}{|l|}{Scan Resolution} & \multicolumn{1}{l|}{Pattern Match} & \multicolumn{1}{l|}{ICP Algoritm} \\ \hline
-50                                    & 3.611416                                            & 3.447834                                  \\ \hline
-100                                   & 4.866397                                            & 3.633849                                  \\ \hline
-200                                   & 14.436533                                           & 4.902481                                  \\ \hline
-300                                   & 41.982077                                           & 6.444234                                  \\ \hline
-400                                   & 111.454374                                          & 8.39427                                   \\ \hline
-500                                   & 243.356459                                          & 11.089166                                 \\ \hline
-\end{tabular}
-\label{tab2}
-\end{center}
-\end{table}
+\begin{equation}
+\Delta E = \sqrt{\overline{X_e}^2 + \overline{Y_e}^2}\label{eqError}
+\end{equation}
+In the second set of data \ref{PrecisionFig}, we can get the precision of the algorithm in different environments by using the formula \eqref{eqError} to compare the precision of the algorithm at different accuracies. The first algorithm can be found to maintain a very good precision at a resolution less than or equal to 300, while the precision is significantly out of tune at a resolution greater than 400. On the other hand, the overall accuracy of the second algorithm does not vary much. Although the accuracy is much less than the first algorithm in the case of low resolution, it can still maintain a stable operation under high precision.
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=\linewidth]{../result/Pattern_Match_Algoritm_Runtime_VS_ICP_Algoritm_Runtime.png}}
@@ -124,15 +89,6 @@ figures and tables after they are cited in the text. Use the abbreviation
 \label{RuntimeFig}
 \end{figure}
 
-Figure Labels: Use 8 point Times New Roman for Figure labels. Use words 
-rather than symbols or abbreviations when writing Figure axis labels to 
-avoid confusing the reader. As an example, write the quantity 
-``Magnetization'', or ``Magnetization, M'', not just ``M''. If including 
-units in the label, present them within parentheses. Do not label axes only 
-with units. In the example, write ``Magnetization (A/m)'' or ``Magnetization 
-\{A[m(1)]\}'', not just ``A/m''. Do not label axes with a ratio of 
-quantities and units. For example, write ``Temperature (K)'', not 
-``Temperature/K''.
 
 \section{Conclusion}
 In general, the Pattern matching algorithm can have better accuracy among the two algorithms we implemented, but the computation time is too long in the case of high clarity. The ICP algorithm is able to obtain the position quickly but with poor accuracy. Both algorithms have their advantages and disadvantages, but neither is the best solution. Also, our test environment was conducted virtually. It is expected that our algorithm will perform worse in a realistic environment. However, the algorithm practice gave us a better understanding of how SLAM algorithms are implemented. As Shan mentioned in his paper, the purely 2D Lidar-based SLAM algorithm has a lot of limitations\cite{b2}. In the future, we hope to achieve more accurate SLAM positioning by adding filtering algorithms and other sensors.
