@@ -35,8 +35,7 @@ function vector = getVector(vectorList)
     mostAng = zeros(1,maxDraw);
     angleList = vectorList(:,1);
     for count = 1:maxDraw
-        [modeAng, freq] = mode(angleList);
-        mostAng(count) = modeAng;
+        mostAng(count)  = mode(angleList);
         tfVec = angleList(:) == mostAng(count);
         angleList(tfVec) = [];
     end
