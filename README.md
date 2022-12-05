@@ -1,6 +1,7 @@
 # Simple_SLAM
 
-A simple SLAM alogorithm implemented with matlab
+A simple SLAM alogorithm implemented with matlab.  
+Demo Video: [Youtube](https://www.youtube.com/watch?v=Un5HQSlIwlo)
 
 ## How to run
 
