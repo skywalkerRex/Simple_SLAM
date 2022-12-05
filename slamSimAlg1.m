@@ -16,9 +16,8 @@ angles = deg2rad(angles)';
 pause(1);
 
 maxLidarRange = 8;
-mapResolution = 100;
-%mapResolution = 80;
-mapSearchRange = mapResolution / 10;
+mapResolution = 200;
+mapSearchRange = round(mapResolution / 10);
 mapSize = mapResolution * 2;
 robotOrigin = [-3, -2.8];
 robotSlamObj = slamObjAlg1(maxLidarRange, mapResolution, mapSearchRange, mapSize, robotOrigin);
@@ -91,7 +90,7 @@ tError = posArray - trajectory;
 dErrorX = mean(tError(:,1));
 dErrorY = mean(tError(:,2));
 disp("Mean Error: ");
-outDisp = sprintf('X: %f, Y: %s, Avg %f\n', dErrorX, dErrorY, (dErrorX+dErrorY));
+outDisp = sprintf('X: %f, Y: %s, Avg %f\n', dErrorX, dErrorY, sqrt(dErrorX^2+dErrorY^2));
 fprintf(outDisp);
 
 close(vrf);

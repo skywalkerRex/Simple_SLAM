@@ -31,17 +31,21 @@ function vectorList = getVectorList(currPointList, prevPointList, boardSize, sea
 end
 
 function vector = getVector(vectorList)
-    [vector(1), freq] = mode(vectorList(:, 1), "all");
-    vector(2) = mode(vectorList(:, 2), "all");
-    rmItem = vectorList(:, 1) == vector;
-    vectorList(rmItem, :) = [];
-    [subVector(1), secondFreq] = mode(vectorList(:,1), "all");
-    subVector(2) = mode(vectorList(:,2), "all");
-    if secondFreq > 10
-        distance = ((secondFreq * vector(2)/freq) ^2 + (freq * subVector(2)/secondFreq) ^2) ^0.5;
-        vector = (freq * vector + secondFreq * subVector) / (freq + secondFreq);
-        vector(2) = distance;
+    maxDraw = 5;
+    mostAng = zeros(1,maxDraw);
+    angleList = vectorList(:,1);
+    for count = 1:maxDraw
+        [modeAng, freq] = mode(angleList);
+        mostAng(count) = modeAng;
+        tfVec = angleList(:) == mostAng(count);
+        angleList(tfVec) = [];
     end
+    mostAng(count+1:end)=[];
+    tfVec = ~ismember(vectorList(:,1), mostAng);
+    vectorList(tfVec, :) = [];
+    [xs, ys] = pol2cart(vectorList(:,1), vectorList(:,2));
+    [l,r] = cart2pol(mean(xs), mean(ys));
+    vector = [l,r];
 end
 
 function position = getPosition(currenPosition, vector)
