@@ -33,11 +33,14 @@ end
 function vector = getVector(vectorList)
     [vector(1), freq] = mode(vectorList(:, 1), "all");
     vector(2) = mode(vectorList(:, 2), "all");
-    vectorList(vectorList == vector) = [];
+    rmItem = vectorList(:, 1) == vector;
+    vectorList(rmItem, :) = [];
     [subVector(1), secondFreq] = mode(vectorList(:,1), "all");
     subVector(2) = mode(vectorList(:,2), "all");
-    if secondFreq > 5
+    if secondFreq > 10
+        distance = ((secondFreq * vector(2)/freq) ^2 + (freq * subVector(2)/secondFreq) ^2) ^0.5;
         vector = (freq * vector + secondFreq * subVector) / (freq + secondFreq);
+        vector(2) = distance;
     end
 end
 
