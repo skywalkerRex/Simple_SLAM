@@ -1,24 +1,23 @@
 # Simple_SLAM
 
-A simple SLAM alogorithm mplemented with matlab
+A simple SLAM alogorithm implemented with matlab
 
-## Approach
+## How to run
 
-This algorithm is intended to do SLAM based on Lidar data and without odometry sensor.
+1. Run the first Algoritm Test with SlamSimAlg1  
+2. Run the Second Algoritm Test with SlamSimAlg2  
+3. Tuning the resolution setting to see the result under different condition  
 
-From Lidar sensor, we could get a data includes 240 sets of data with range and radius. Those data demonstrates the Lidar detect data around the robot.
+## Results
 
-In order to do the SLAM computation, transfering Lidar data into Cartesian coordinate and mapping into a customized resoultion output is easier computation.
-After getting the second set of data. By looping all the direction of to find out the difference between curren scan vs previous scan to determine which direction and how long distance did the robot move.
+### Pattern Match Result
 
-To collect a comperhensive mapping data, the robot need to finish a loop running in the area. By cumulating the data, finally we could get the map data of the current space.
+![Pattern Localization Result](https://github.com/skywalkerRex/Simple_SLAM/blob/main/result/Pattern_Localization_Result.jpg?raw=true)
 
-## Result
+![Pattern Mapping Result](https://github.com/skywalkerRex/Simple_SLAM/blob/main/result/Pattern_Mapping_Result.jpg?raw=true)
 
-### Localization Result
+### ICP Match Result
 
-![Localization Result](https://github.com/skywalkerRex/Simple_SLAM/blob/main/result/Localization_Result.jpg?raw=true)
+![ICP Localization Result](https://github.com/skywalkerRex/Simple_SLAM/blob/main/result/ICP_Localization_Result.jpg?raw=true)
 
-### Mapping Result
-
-![Mapping Result](https://github.com/skywalkerRex/Simple_SLAM/blob/main/result/Mapping_Result.jpg?raw=true)
+![ICP Mapping Result](https://github.com/skywalkerRex/Simple_SLAM/blob/main/result/ICP_Mapping_Result.jpg?raw=true)
