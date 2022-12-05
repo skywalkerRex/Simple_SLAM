@@ -58,75 +58,70 @@ By studying Wolfgang \& Damon\cite{b1} and John \& John\cite{b4}'s article, we h
 The pattern match algorithm is our own design of the SLAM algorithm. We want to find the current position of the robot by assuming the displacement amount. Whenever a new scan is obtained, the program first speaks the result of the scan through a coordinate transformation to obtain a matrix with a set resolution. Each point in the matrix that has a lidar mapped to it is set to 1, and points that are not mapped are set to 0. We then convert the current scan by traversing the possible displacements and comparing the difference with the previous result. Then we obtain the difference between the two matrices by summing the absolute values of the difference matrix. By recording the displacement of the matrix with the smallest difference, we obtain the displacement between the robot this time and the last received result. Then by adding the previous coordinates to the current displacement, we obtain the correct coordinates. Since the first step of the algorithm is to obtain a matrix that can be calculated quickly by reducing the resolution of the scan. The accuracy of the algorithm gets better as the resolution increases, but because all possible displacements are calculated each time, the efficiency of the algorithm becomes slower as the resolution increases. To solve this problem, we add the parameter search distance to limit the number of displacements that the algorithm traverses. However, this also limits the distance of a single displacement of the robot, which can cause the algorithm to lose track if the robot is displaced too far.
 
 \subsection{Iterative Closest Point SLAM}
-The IEEEtran class file is used to format your paper and style the text. All margins, 
-column widths, line spaces, and text fonts are prescribed; please do not 
-alter them. You may note peculiarities. For example, the head margin
-measures proportionately more than is customary. This measurement 
-and others are deliberate, using specifications that anticipate your paper 
-as one part of the entire proceedings, and not as an independent document. 
-Please do not revise any of the current designations.
-
-\section{Results Analyze}
-Before you begin to format your paper, first write and save the content as a 
-separate text file. Complete all content and organizational editing before 
-formatting. Please note sections below for more information on 
-proofreading, spelling and grammar.
-
-Keep your text and graphic files separate until after the text has been 
-formatted and styled. Do not number text heads---{\LaTeX} will do that 
-for you.
-
-\subsection{Abbreviations and Acronyms}\label{AA}
-Define abbreviations and acronyms the first time they are used in the text, 
-even after they have been defined in the abstract. Abbreviations such as 
-IEEE, SI, MKS, CGS, ac, dc, and rms do not have to be defined. Do not use 
-abbreviations in the title or heads unless they are unavoidable.
-
-\subsection{Equations}
-Number equations consecutively. To make your 
-equations more compact, you may use the solidus (~/~), the exp function, or 
-appropriate exponents. Italicize Roman symbols for quantities and variables, 
-but not Greek symbols. Use a long dash rather than a hyphen for a minus 
-sign. Punctuate equations with commas or periods when they are part of a 
-sentence, as in:
+In order to be able to reduce the number of operations to calculate the current coordinate locations, we want to ensure that the algorithm maintains a stable coordinate determination under the high-accuracy radar detection information. The first algorithm, it requires a lot of comparison cycles to find the current position, which will take a lot of time to compute, especially in a high-precision environment. To solve this problem, we intend to try a mathematical approach. Thanks to the inspiration of Nearest Neighbor Processing (NNP), we learned about the Iterative closest point (ICP) algorithm, and we intend to apply it to our SLAM. In ICP, it will convert the information from the current radar scan and the previous radar information into two sets of coordinate positions of the obstacle. 
 \begin{equation}
-a+b=\gamma\label{eq}
+    CurrPos = PrePos + [\sum_{i=1}^{n}(Vector_i)]/n\label{eqICP}
 \end{equation}
 
-Be sure that the 
-symbols in your equation have been defined before or immediately following 
-the equation. Use ``\eqref{eq}'', not ``Eq.~\eqref{eq}'' or ``equation \eqref{eq}'', except at 
-the beginning of a sentence: ``Equation \eqref{eq} is . . .''
+Afterward, by overlapping the two sets of data while removing the unchanged part and keeping the moving part. The position of the obstacle that has changed before and after the movement can be obtained. Moreover, based on the current radar information, each node in the current set will find the nearest node in the previous radar information. Simultaneously it will save the angle and distance difference between each node and its nearest neighbor in a new array. Through this method, we can obtain an array containing the approximate direction and distance of each node. However, the data at this point contains a lot of noise information in order to reduce the impact of noise on the data. This algorithm will be done by finding the top five sets of plural data with the largest percentage in the array and getting the vector information of their average values. Therefore, the relative direction and distance of the overall movement will be estimated to get the current position
+
+\section{Results Analyze}
+In the test section, we use MATLAB's simulator world as the field to run this test. By modifying the running path from the original demonstrated path, and adding a diagonal running path, we could also validate the robustness of our algorithm. When the simulation run is finished, we could compare the algorithm-generated running path and the actual running path to validate the accuracy of the algorithm.
+\begin{equation}
+\Delta E = \sqrt{\overline{X_e}^2 + \overline{Y_e}^2}\label{eqError}
+\end{equation}
 
 \subsection{Figures and Tables}
 \paragraph{Positioning Figures and Tables} Place figures and tables at the top and 
 bottom of columns. Avoid placing them in the middle of columns. Large 
 figures and tables may span across both columns. Figure captions should be 
 below the figures; table heads should appear above the tables. Insert 
-figures and tables after they are cited in the text. Use the abbreviation 
-``Fig.~\ref{fig}'', even at the beginning of a sentence.
+figures and tables after they are cited in the text. Use the abbreviation
 
 \begin{table}[htbp]
-\caption{Table Type Styles}
+\caption{Pattern Match Algoritm Precision VS ICP Algoritm Precision}
 \begin{center}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|r|r|r|}
 \hline
-\textbf{Table}&\multicolumn{3}{|c|}{\textbf{Table Column Head}} \\
-\cline{2-4} 
-\textbf{Head} & \textbf{\textit{Table column subhead}}& \textbf{\textit{Subhead}}& \textbf{\textit{Subhead}} \\
-\hline
-copy& More table copy$^{\mathrm{a}}$& &  \\
-\hline
-\multicolumn{4}{l}{$^{\mathrm{a}}$Sample of a Table footnote.}
+\multicolumn{1}{|l|}{Scan Resolution} & \multicolumn{1}{l|}{Pattern Match} & \multicolumn{1}{l|}{ICP Algoritm} \\ \hline
+50                                    & 0.086978                                              & 0.520403                                    \\ \hline
+100                                   & 0.059874                                              & 0.90311                                     \\ \hline
+200                                   & 0.020188                                              & 0.947589                                    \\ \hline
+300                                   & 0.143696                                              & 0.913981                                    \\ \hline
+400                                   & 1.795881                                              & 0.86157                                     \\ \hline
+500                                   & 3.327148                                              & 0.825105                                    \\ \hline
 \end{tabular}
 \label{tab1}
 \end{center}
 \end{table}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics{fig1.png}}
-\caption{Example of a figure caption.}
-\label{fig}
+\centerline{\includegraphics[width=\linewidth]{../result/Pattern_Match_Algoritm_Precision_VS_ICP_Algoritm_Precision.png}}
+\caption{Pattern Match Algoritm Precision VS ICP Algoritm Precision}
+\label{PrecisionFig}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Pattern Match Algoritm Runtime VS ICP Algoritm Runtime}
+\begin{center}
+\begin{tabular}{|r|r|r|}
+\hline
+\multicolumn{1}{|l|}{Scan Resolution} & \multicolumn{1}{l|}{Pattern Match} & \multicolumn{1}{l|}{ICP Algoritm} \\ \hline
+50                                    & 3.611416                                            & 3.447834                                  \\ \hline
+100                                   & 4.866397                                            & 3.633849                                  \\ \hline
+200                                   & 14.436533                                           & 4.902481                                  \\ \hline
+300                                   & 41.982077                                           & 6.444234                                  \\ \hline
+400                                   & 111.454374                                          & 8.39427                                   \\ \hline
+500                                   & 243.356459                                          & 11.089166                                 \\ \hline
+\end{tabular}
+\label{tab2}
+\end{center}
+\end{table}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{../result/Pattern_Match_Algoritm_Runtime_VS_ICP_Algoritm_Runtime.png}}
+\caption{Pattern Match Algoritm Runtime VS ICP Algoritm Runtime}
+\label{RuntimeFig}
 \end{figure}
 
 Figure Labels: Use 8 point Times New Roman for Figure labels. Use words 
@@ -140,14 +135,7 @@ quantities and units. For example, write ``Temperature (K)'', not
 ``Temperature/K''.
 
 \section{Conclusion}
-Before you begin to format your paper, first write and save the content as a 
-separate text file. Complete all content and organizational editing before 
-formatting. Please note sections below for more information on 
-proofreading, spelling and grammar.
-
-Keep your text and graphic files separate until after the text has been 
-formatted and styled. Do not number text heads---{\LaTeX} will do that 
-for you.
+In general, the Pattern matching algorithm can have better accuracy among the two algorithms we implemented, but the computation time is too long in the case of high clarity. The ICP algorithm is able to obtain the position quickly but with poor accuracy. Both algorithms have their advantages and disadvantages, but neither is the best solution. Also, our test environment was conducted virtually. It is expected that our algorithm will perform worse in a realistic environment. However, the algorithm practice gave us a better understanding of how SLAM algorithms are implemented. As Shan mentioned in his paper, the purely 2D Lidar-based SLAM algorithm has a lot of limitations\cite{b2}. In the future, we hope to achieve more accurate SLAM positioning by adding filtering algorithms and other sensors.
 
 \begin{thebibliography}{00}
 \bibitem{b1} W. Hess, D. Kohler, H. Rapp and D. Andor, "Real-time loop closure in 2D LIDAR SLAM," 2016 IEEE International Conference on Robotics and Automation (ICRA), 2016, pp. 1271-1278, doi: 10.1109/ICRA.2016.7487258.
