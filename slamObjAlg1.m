@@ -23,9 +23,7 @@ classdef slamObjAlg1 < slamObj
                 currOffSet = zeros(1,2);
                 for i = (-obj.m_maxSearch):obj.m_maxSearch
                     for j = (-obj.m_maxSearch):obj.m_maxSearch
-                        shiftScan = matrixShift(obj.m_currScan, i, j);
-                        diffMatrix = shiftScan - obj.m_prevScan;
-                        currDiff = sum(abs(diffMatrix), 'all');
+                        currDiff = getMatrixDiff(obj.m_currScan, obj.m_prevScan, i, j);
                         if(currDiff < minDiff)
                             % imagesc(diffMatrix);
                             minDiff = currDiff;
