@@ -24,13 +24,13 @@ robotOrigin = [-3, -2.8];
 robotSlamObj = slamObjAlg1(maxLidarRange, mapResolution, mapSearchRange, mapSize, robotOrigin);
 controlRate = rateControl(10);
 
-posArray = zeros(200, 2);
+posArray = zeros(length(trajectory), 2);
 
 % Create Figures
 mapFig = figure();
 localizationFig = figure();
 figure(localizationFig), title('Localization Result');
-
+tic;
 for i=1:length(trajectory)
     % Use translation property to move the robot. 
     robotVRNode.children.translation = [trajectory(i,1) 0 trajectory(i,2)];
@@ -47,8 +47,8 @@ for i=1:length(trajectory)
     % Add new scan to SLAM Object
     robotSlamObj = addNode(robotSlamObj, range, angles);
 
-    disp("Curr Position is ");
-    disp(GetCurrLoc(robotSlamObj));
+    %disp("Curr Position is ");
+    %disp(GetCurrLoc(robotSlamObj));
     posArray(i, :) = GetCurrLoc(robotSlamObj);
     
     hold on;
@@ -64,6 +64,20 @@ for i=1:length(trajectory)
 
     % waitfor(controlRate);
 end
+
+runTime = toc;
+
+disp("Run Analysis: ");
+outDisp = sprintf('Total Run Time: %fs\n',runTime);
+fprintf(outDisp);
+outDisp = sprintf('Average Step Run Time: %fs\n', runTime/length(trajectory));
+fprintf(outDisp);
+tError = posArray - trajectory;
+dErrorX = mean(tError(:,1));
+dErrorY = mean(tError(:,2));
+disp("Detla Error: ");
+outDisp = sprintf('X: %f, Y: %s, Sum %f\n', dErrorX, dErrorY, (dErrorX+dErrorY));
+fprintf(outDisp);
 
 close(vrf);
 close(w);

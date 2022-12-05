@@ -30,9 +30,9 @@ classdef slamObj
         end
 
         function currPos = GetCurrLoc(obj)
-            % newX = obj + obj.m_currPos(1)/(obj.m_resolution/2)*obj.m_maxRange;
-            % newY = originY + obj.m_currPos(2)/(obj.m_resolution/2)*obj.m_maxRange;
-            currPos =  obj.m_origin + obj.m_currPos./(obj.m_resolution/2).*obj.m_maxRange;
+            newX = obj.m_origin(1) + obj.m_currPos(1)/(obj.m_resolution/2)*obj.m_maxRange;
+            newY = obj.m_origin(2) - obj.m_currPos(2)/(obj.m_resolution/2)*obj.m_maxRange;
+            currPos = [newX, newY];
         end
 
         function map = GetMap(obj)
